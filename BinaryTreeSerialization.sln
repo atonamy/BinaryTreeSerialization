@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTreeSerialization", "BinaryTreeSerialization\BinaryTreeSerialization.csproj", "{124FA85A-1D13-4825-8A35-4D8FE2BAA4DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45BF5E38-4E6D-4117-A3D0-3C435BD09F12}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{124FA85A-1D13-4825-8A35-4D8FE2BAA4DB}.Debug|x86.ActiveCfg = Debug|x86
+		{124FA85A-1D13-4825-8A35-4D8FE2BAA4DB}.Debug|x86.Build.0 = Debug|x86
+		{124FA85A-1D13-4825-8A35-4D8FE2BAA4DB}.Release|x86.ActiveCfg = Release|x86
+		{124FA85A-1D13-4825-8A35-4D8FE2BAA4DB}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
