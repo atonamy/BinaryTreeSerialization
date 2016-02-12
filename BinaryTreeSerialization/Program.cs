@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Text;
 
 namespace BinaryTreeSerialization
 {
@@ -61,49 +62,54 @@ namespace BinaryTreeSerialization
 			Node result = new Node((char)0);
 			Stack<Node> right_parent = new Stack<Node>();
 			Node current_node = result;
+			int current_index = 0;
 
-			while (data.Length > 0) {
-				while (data.StartsWith ("\\l") || data.StartsWith ("\\r")) {
+			Func<int, string> shift_position = (index) => { return (index < data.Length-1) ? data.Substring (index, 2) : String.Empty; };
+
+			while (current_index < data.Length) {
+				string current_position = shift_position(current_index);
+				while (current_position.Equals ("\\l") || current_position.Equals ("\\r")) {
 				
-					if (data.StartsWith ("\\l")) {
-						data = data.Remove (0, "\\l".Length);
+					if (current_position.Equals ("\\l")) {
+						current_index += 2;
 						current_node.left = new Node ((char)0);
+						current_position = shift_position(current_index);
 					}
-					if (data.StartsWith ("\\r")) {
-						data = data.Remove (0, "\\r".Length);
+					if (current_position.Equals ("\\r")) {
+						current_index += 2;
 						current_node.right = new Node ((char)0);
 						right_parent.Push (current_node);
 					}
 
-					current_node.c = data [0];
-					data = data.Remove (0, 1);
+					current_node.c = data[current_index++];
+					current_position = shift_position(current_index);
 
-					while (data.StartsWith ("\\<") || data.StartsWith ("\\>")) {
-						if (data.StartsWith ("\\<")) {
-							data = data.Remove (0, "\\<".Length);
-							if (data.StartsWith ("\\l") || data.StartsWith ("\\r")) {
+					while (current_position.Equals ("\\<") || current_position.Equals ("\\>")) {
+						if (current_position.Equals ("\\<")) {
+							current_index += 2;
+							current_position = shift_position(current_index);
+							if (current_index < data.Length-1 && (current_position.Equals ("\\l") || current_position.Equals ("\\r"))) {
 								current_node = current_node.left;
 								continue;
 							}
-							current_node.left.c = data [0];
-							data = data.Remove (0, 1);
+							current_node.left.c = data[current_index++];
+							current_position = shift_position(current_index);
 						}
-						if (data.StartsWith ("\\>")) {
-							data = data.Remove (0, "\\>".Length);
-							if (data.StartsWith ("\\l") || data.StartsWith ("\\r")) {
+						if (current_position.Equals ("\\>")) {
+							current_index += 2;
+							current_position = shift_position(current_index);
+							if (current_position.Equals ("\\l") || current_position.Equals ("\\r")) {
 								current_node = right_parent.Pop ().right;
 								continue;
 							}
-							right_parent.Pop ().right.c = data [0];
-							data = data.Remove (0, 1);
+							right_parent.Pop ().right.c = data[current_index++];
+							current_position = shift_position(current_index);
 						}
 					}
+				}
 
-				}
-				if (data.Length > 0) {
-					result.c = data [0];
-					data = data.Remove (0, 1);
-				}
+				if (data.Length - current_index == 1) 
+					result.c =  data[current_index++];
 			}
 
 
@@ -140,7 +146,7 @@ namespace BinaryTreeSerialization
 				Console.WriteLine ("Start testing iteration " + i);
 				Thread.Sleep (2000);
 				Node serialized_node = new Node ();
-				PopulateNode (serialized_node, mRandom.Next (1, 26), 0);
+				PopulateNode (serialized_node, mRandom.Next (1, 31), 0);
 				String result = Serialize (serialized_node);
 				Node deserialize_node = Deserialize (result);
 				if (TestNodes (serialized_node, deserialize_node))
